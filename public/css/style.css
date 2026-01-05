@@ -1,0 +1,46 @@
+/* public/css/style.css */
+
+/* 1. Custom Font (Optional - makes it look modern) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #ebf2f8;
+    margin-bottom: 25px;
+}
+
+/* 3. Contestant Card Hover Effect */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card-img-top {
+    height: 350px;           /* Sets a fixed height for all images */
+    object-fit: cover;       /* Crops the image to fill the box without stretching */
+    object-position: top;    /* Focuses on the top (faces) rather than the center */
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Moves up slightly */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+/* 4. The Badge Logic */
+/* .vote-badge {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+    border-radius: 20px;
+} */
+
+/* 5. Navbar adjustments */
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+h4.text-center {
+    color: #198754;
+}

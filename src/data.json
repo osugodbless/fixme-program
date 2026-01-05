@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "name": "Godbless Osu",
+    "school": "Ojo High School",
+    "bio": "Tech enthusiast looking to use code to solve community problems.",
+    "image": "/img/godbless.jpg",
+    "votes": 7
+  },
+  {
+    "id": "2",
+    "name": "Eloho Ochonogor",
+    "school": "Federal Government College",
+    "bio": "A poet who believes art can change the narrative of Nigerian youths.",
+    "image": "/img/eloho.jpg",
+    "votes": 0
+  },
+  {
+    "id": "3",
+    "name": "Joseph Onosie",
+    "school": "Command Secondary School",
+    "bio": "An aspiring debater passionate about fixing the education system.",
+    "image": "/img/joseph.jpg",
+    "votes": 0
+  }
+]
