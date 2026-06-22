@@ -8,7 +8,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const VOTE_COST = 100; // 1 Vote = 100 Naira
+const VOTE_COST = 200; // 1 Vote = 100 Naira
 
 // API: Get all contestants
 app.get('/api/contestants', (req, res) => {

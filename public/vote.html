@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vote - Fix Me</title>
+    <title>Vote - MGG</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -11,7 +11,7 @@
     
     <nav class="navbar navbar-dark bg-success">
         <div class="container">
-            <a class="navbar-brand" href="#">Fix Me Initiative</a>
+            <a class="navbar-brand" href="#">Greater Grace Edu. Consults</a>
             <div>
                 <a href="index.html" class="btn btn-outline-light btn-sm">About</a>
                 <a href="vote.html" class="btn btn-light btn-sm">Vote Now</a>
@@ -20,8 +20,8 @@
     </nav>
 
     <div class="container py-5">
-        <h2 class="text-center mb-4">Vote for <span style="color: #198754; font-size: larger; font-family: 'Courier New', Courier, monospace;">Miss/Mr. Intellect</span></h2>
-        <p class="text-center text-muted">1 Vote = ₦100. You can vote multiple times!</p>
+        <h2 class="text-center mb-4">Vote for <span style="color: #198754; font-size: larger; font-family: 'Courier New', Courier, monospace;">Miss Greater Grace</span></h2>
+        <p class="text-center text-muted">1 Vote = ₦200. You can vote multiple times!</p>
         
         <div class="row" id="contestant-list">
             <div class="text-center">Loading contestants...</div>
@@ -37,6 +37,8 @@
                 </div>
                 <div class="modal-body">
                     <p>Voting for: <strong id="modal-candidatename"></strong></p>
+                    <p class="text-muted">1 Vote = ₦200. You can vote multiple times!</p>
+
                     <form id="voteForm">
                         <input type="hidden" id="modal-candidateid">
                         <div class="mb-3">
@@ -49,10 +51,15 @@
                         </div>
                         <div class="mb-3">
                             <label>Amount to Spend (₦)</label>
-                            <input type="number" class="form-control" id="voter-amount" min="100" value="100" required>
+                            <input type="number" class="form-control" id="voter-amount" min="200" value="200" required>
                             <small class="text-success" id="vote-count-preview">Equals 1 Vote</small>
                         </div>
-                        <button type="submit" class="btn btn-success w-100">Proceed to Pay</button>
+                        <button type="submit" id="payButton" class="btn btn-success w-100" onclick="showLoadingState(this)">
+                            <!-- The Bootstrap spinner (hidden by default) -->
+                            <span id="paySpinner" class="spinner-border spinner-border-sm d-none me-2" role="status" aria-hidden="true"></span>
+                            <!-- The button text -->
+                            <span id="payText">Proceed to Pay</span>
+                        </button>
                     </form>
                 </div>
             </div>
@@ -71,11 +78,16 @@
                     list.innerHTML += `
                         <div class="col-md-4 mb-4">
                             <div class="card h-100 shadow-sm">
-                                <img src="${c.image}" class="card-img-top" alt="${c.name}">
+                                <img src="${c.image}" class="card-img-top w-100" alt="${c.name}">
                                 <div class="card-body text-center">
-                                    <h5 class="card-title">${c.name}</h5>
-                                    <p class="text-muted small">${c.school}</p>
+                                    <h5 class="card-title"><strong class="text-primary">${c.name}</strong></h5>
+                                    <p class="text-muted small"><em>aka "${c.stageName}"</em></p>
                                     <p class="card-text">${c.bio}</p>
+
+                                    <div class="text-center text-start bg-light text-primary p-2 rounded small mb-3 border-start border-primary border-3">
+                                        <strong>💡 Fun Fact:</strong> ${c.funFact}
+                                    </div>
+
                                     <div class="badge bg-warning text-dark mb-3 fs-6">Votes: ${c.votes}</div>
                                     <br>
                                     <button class="btn btn-outline-success" onclick="openVoteModal('${c.id}', '${c.name}')">Vote for Me</button>
@@ -95,7 +107,7 @@
 
         // 3. Update "Equals X Votes" text dynamically
         document.getElementById('voter-amount').addEventListener('input', function(e) {
-            const votes = Math.floor(e.target.value / 100);
+            const votes = Math.floor(e.target.value / 200);
             document.getElementById('vote-count-preview').innerText = `Equals ${votes} Votes`;
         });
 
@@ -123,6 +135,46 @@
             });
         });
     </script>
+    
+    <script>
+        function showLoadingState(button) {
+            // 1. Find the form this button belongs to
+            const form = button.closest('form');
+            
+            // 2. Check if the form has empty required fields
+            // If it is NOT valid, stop the function right here. 
+            // The browser will handle showing the "Please fill out this field" warnings.
+            if (form && !form.checkValidity()) {
+                return; 
+            }
+
+            // 3. If everything is filled out, show the spinning icon
+            document.getElementById('paySpinner').classList.remove('d-none');
+            
+            // 4. Change the text to let the user know it's working
+            document.getElementById('payText').innerText = 'Processing...';
+            
+            // 5. Disable the button
+            setTimeout(() => {
+                button.disabled = true;
+            }, 10);
+        }
+
+        // NEW: Reset the button when returning via the "Back" button
+        window.addEventListener('pageshow', function(event) {
+            const payButton = document.getElementById('payButton');
+            const paySpinner = document.getElementById('paySpinner');
+            const payText = document.getElementById('payText');
+
+            // If the button exists and is currently disabled, reset everything
+            if (payButton && payButton.disabled) {
+                payButton.disabled = false;
+                paySpinner.classList.add('d-none');
+                payText.innerText = 'Proceed to Pay';
+            }
+        });
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

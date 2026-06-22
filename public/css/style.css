@@ -18,8 +18,8 @@ body {
 }
 
 .card-img-top {
-    height: 350px;           /* Sets a fixed height for all images */
-    object-fit: cover;       /* Crops the image to fill the box without stretching */
+    height: 280px;           /* Sets a fixed height for all images */
+    object-fit: contain;       /* Crops the image to fill the box without stretching */
     object-position: top;    /* Focuses on the top (faces) rather than the center */
 }
 

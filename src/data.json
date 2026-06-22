@@ -1,11 +1,12 @@
 [
   {
     "id": "1",
-    "name": "Godbless Osu",
-    "school": "Ojo High School",
-    "bio": "Tech enthusiast looking to use code to solve community problems.",
-    "image": "/img/godbless.jpg",
-    "votes": 7
+    "name": "Enemosah Stephanie",
+    "stageName": "Sugar",
+    "bio": "A writer, kind by heart, passionate by pen. Sugar believes every girl has a story worth hearing. Here to let her voice be heard, one word at a time",
+    "funFact": "I smile a lot",
+    "image": "/img/stephanie.jpg",
+    "votes": 1
   },
   {
     "id": "2",
