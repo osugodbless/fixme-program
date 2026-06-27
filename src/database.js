@@ -40,7 +40,6 @@ const connectDB = async () => {
 
 // Async Helper: Get all contestants
 const getContestants = async () => {
-    await connectDB();
     try {
         const contestants = await Contestant.find({}).sort({ id: 1 }).lean();
         return contestants;
@@ -52,7 +51,6 @@ const getContestants = async () => {
 
 // Async Function to safely add votes
 const addVotes = async (id, numberOfVotes) => {
-    await connectDB();
     try {
         // Atomic operations ($inc) prevent race conditions intrinsically at the DB layer
         const result = await Contestant.findOneAndUpdate(

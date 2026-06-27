@@ -1,7 +1,7 @@
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-const { getContestants, addVotes } = require('./src/database');
+const { getContestants, addVotes, connectDB } = require('./src/database');
 const { initializePayment, verifyPayment } = require('./src/paystack');
 
 const app = express();
@@ -60,6 +60,9 @@ app.get('/verify-vote', async (req, res) => {
         res.send("Payment verification failed.");
     }
 });
+
+// Connect to Database immediately when server starts
+connectDB();
 
 const PORT = process.env.PORT || 3000;
 const baseURL = process.env.BASE_URL || `http://localhost:${PORT}`;
