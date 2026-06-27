@@ -6,7 +6,7 @@
     "bio": "A writer, kind by heart, passionate by pen. Sugar believes every girl has a story worth hearing. Here to let her voice be heard, one word at a time",
     "funFact": "I smile a lot",
     "image": "/img/stephanie.jpg",
-    "votes": 0
+    "votes": 2
   },
   {
     "id": "2",
@@ -15,7 +15,7 @@
     "bio": "An ambivert who loves spending quality time with family and close friends. I value mutual respect and appreciation in all relationships",
     "funFact": "I like money",
     "image": "/img/kristal.jpg",
-    "votes": 0
+    "votes": 1
   },
   {
     "id": "3",
@@ -24,7 +24,7 @@
     "bio": "Precious lives by a simple philosophy: show up, lift others up, and extend a helping hand wherever it’s needed most",
     "funFact": "I am jovial",
     "image": "/img/precious.jpg",
-    "votes": 0
+    "votes": 1
   },
   {
     "id": "4",
@@ -33,6 +33,6 @@
     "bio": "Christiana advocates for truth and dedicated to speaking up where it matters most and standing firm for girls who need a voice",
     "funFact": "I sing a lot, and I'm always happy",
     "image": "/img/christiana.jpg",
-    "votes": 0
+    "votes": 1
   }
 ]

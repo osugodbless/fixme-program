@@ -4,25 +4,64 @@ const path = require('path');
 // The path to our permanent storage file
 const dbPath = path.join(__dirname, 'data.json');
 
-// Helper: Read data from file
-const getContestants = () => {
+// 1. Load the database into memory ONCE when the server starts
+let contestantsCache = [];
+try {
     const data = fs.readFileSync(dbPath, 'utf8');
-    return JSON.parse(data);
+    contestantsCache = JSON.parse(data);
+    console.log("Database successfully loaded into memory.");
+} catch (err) {
+    console.error("Error reading initial database file:", err);
+    contestantsCache = [];
+}
+
+// Variables to handle write queuing safely
+let isWriting = false;
+let pendingWrite = false;
+
+// Helper: Safely save data to file asynchronously in the background
+const saveContestantsAsync = () => {
+    // If a save is already in progress, flag that we need to save again after it finishes
+    if (isWriting) {
+        pendingWrite = true;
+        return;
+    }
+
+    isWriting = true;
+
+    // Write to the file asynchronously without blocking the server
+    fs.writeFile(dbPath, JSON.stringify(contestantsCache, null, 2), (err) => {
+        isWriting = false;
+
+        if (err) {
+            console.error("Error saving database file:", err);
+        }
+
+        // If another vote came in while we were writing, trigger another save
+        if (pendingWrite) {
+            pendingWrite = false;
+            saveContestantsAsync();
+        }
+    });
 };
 
-// Helper: Save data to file
-const saveContestants = (data) => {
-    fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
+// Return the blazing fast in-memory array instead of reading the disk
+const getContestants = () => {
+    return contestantsCache;
 };
 
 // Function to add votes safely
 const addVotes = (id, numberOfVotes) => {
-    const contestants = getContestants(); // 1. Get current list
-    const candidate = contestants.find(c => c.id === id);
-    
+    // 2. Update RAM instantly (Safe from Race Conditions because Node memory is single-threaded)
+    const candidate = contestantsCache.find(c => c.id === id);
+
     if (candidate) {
-        candidate.votes += numberOfVotes; // 2. Add votes
-        saveContestants(contestants);     // 3. Save back to file immediately
+        // Add the votes in memory
+        candidate.votes += numberOfVotes;
+
+        // 3. Trigger a background save to the hard drive
+        saveContestantsAsync();
+
         return true;
     }
     return false;
