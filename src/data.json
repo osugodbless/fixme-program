@@ -3,8 +3,8 @@
     "id": "1",
     "name": "Enemosah Stephanie",
     "stageName": "Sugar",
-    "bio": "A writer, kind by heart, passionate by pen. Sugar believes every girl has a story worth hearing. Here to let her voice be heard, one word at a time",
-    "funFact": "I smile a lot",
+    "bio": "Stephanie is a writer, kind by heart, passionate by pen. Sugar believes every girl has a story worth hearing. Here to let her voice be heard, one word at a time",
+    "funFact": "She smiles a lot",
     "image": "/img/stephanie.jpg",
     "votes": 0
   },
@@ -12,8 +12,8 @@
     "id": "2",
     "name": "Ogwu Ezinne Kristal",
     "stageName": "Kristal",
-    "bio": "An ambivert who loves spending quality time with family and close friends. I value mutual respect and appreciation in all relationships",
-    "funFact": "I like money",
+    "bio": "An ambivert who loves spending quality time with family and close friends. She values mutual respect and appreciation in all relationships",
+    "funFact": "She likes money😊",
     "image": "/img/kristal.jpg",
     "votes": 0
   },
@@ -22,7 +22,7 @@
     "name": "Charles Precious",
     "stageName": "Pretty Angel",
     "bio": "Precious lives by a simple philosophy: show up, lift others up, and extend a helping hand wherever it’s needed most",
-    "funFact": "I am jovial",
+    "funFact": "She has a jovial personality",
     "image": "/img/precious.jpg",
     "votes": 0
   },
@@ -31,8 +31,26 @@
     "name": "Chibuike Christiana",
     "stageName": "Cee Anne",
     "bio": "Christiana advocates for truth and dedicated to speaking up where it matters most and standing firm for girls who need a voice",
-    "funFact": "I sing a lot, and I'm always happy",
+    "funFact": "She sings a lot, and she's always happy",
     "image": "/img/christiana.jpg",
+    "votes": 0
+  },
+  {
+    "id": "5",
+    "name": "Dike Favour Chioma",
+    "stageName": "Stasia",
+    "bio": "Chioma is a simple and jovial young lady. She's an ambivert who loves her space and embraces the journey of life with a happy heart and an open mind",
+    "funFact": "She finds peace in singing, cooking, and reading novels",
+    "image": "/img/chioma.jpg",
+    "votes": 0
+  },
+  {
+    "id": "6",
+    "name": "Okagu Chimamanda Christabel",
+    "stageName": "Christy",
+    "bio": "Christy is driven by a simple but powerful belief: that every girl should possess confidence to stand strong and self-determination to pave her own path",
+    "funFact": "She loves singing and smiles a lot",
+    "image": "/img/christabel.jpg",
     "votes": 0
   }
 ]

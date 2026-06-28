@@ -18,13 +18,13 @@ app.get('/api/contestants', async (req, res) => {
 // API: Start Voting Process
 app.post('/api/vote/start', async (req, res) => {
     const { contestantId, name, email, amount } = req.body;
-    
+
     // Generate a unique reference: Vote_ContestantID_Timestamp
     const reference = `VOTE_${contestantId}_${Date.now()}`;
-    
+
     // Call Paystack
     const paymentData = await initializePayment(name, email, amount, reference);
-    
+
     if (paymentData) {
         res.json({ status: true, url: paymentData.authorization_url });
     } else {
@@ -35,25 +35,25 @@ app.post('/api/vote/start', async (req, res) => {
 // API: Verify Vote (Called automatically by Paystack after payment)
 app.get('/verify-vote', async (req, res) => {
     const reference = req.query.reference; // Paystack sends this in the URL
-    
+
     const paymentDetails = await verifyPayment(reference);
-    
+
     if (paymentDetails && paymentDetails.status === 'success') {
         // Extract info from our custom reference "VOTE_ID_TIME"
-        const parts = reference.split('_'); 
+        const parts = reference.split('_');
         const contestantId = parts[1];
         const amountPaid = paymentDetails.amount / 100; // Convert back to Naira
-        
+
         // Calculate Votes
         const votesToAdd = Math.floor(amountPaid / VOTE_COST);
-        
+
         // Update "Database"
         await addVotes(contestantId, votesToAdd);
 
         // Get the name for the success message
         const allContestants = await getContestants();
         const candidate = allContestants.find(c => c.id === contestantId);
-        
+
         // Redirect user to success page
         res.redirect(`/success.html?votes=${votesToAdd}&name=${candidate ? candidate.name : 'Candidate'}`);
     } else {
@@ -67,6 +67,5 @@ connectDB();
 const PORT = process.env.PORT || 3000;
 const baseURL = process.env.BASE_URL || `http://localhost:${PORT}`;
 app.listen(PORT, () => {
-        console.log(`Server running on http://localhost:${PORT}`);
-        console.log(`Application Accessible at: ${baseURL}`);
+    console.log(`Application Accessible at: ${baseURL}`);
 });

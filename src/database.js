@@ -23,7 +23,7 @@ let isConnected = false;
 
 const connectDB = async () => {
     if (isConnected) return;
-    
+
     try {
         if (!process.env.MONGODB_URI) {
             console.warn("WARNING: MONGODB_URI is not set in your .env file!");
@@ -56,7 +56,7 @@ const addVotes = async (id, numberOfVotes) => {
         const result = await Contestant.findOneAndUpdate(
             { id: id },
             { $inc: { votes: numberOfVotes } },
-            { new: true } // returns the updated document
+            { returnDocument: 'after' } // returns the updated document
         );
         return !!result;
     } catch (err) {
