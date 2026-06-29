@@ -1,9 +1,9 @@
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-const { getContestants, addVotes, connectDB } = require('./src/database');
+const crypto = require('crypto');
+const { getContestants, addVotes, processPaymentAndAddVotes, connectDB } = require('./src/database');
 const { initializePayment, verifyPayment } = require('./src/paystack');
-
 const app = express();
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -47,8 +47,8 @@ app.get('/verify-vote', async (req, res) => {
         // Calculate Votes
         const votesToAdd = Math.floor(amountPaid / VOTE_COST);
 
-        // Update "Database"
-        await addVotes(contestantId, votesToAdd);
+        // Update "Database" securely and idempotently
+        await processPaymentAndAddVotes(reference, contestantId, votesToAdd);
 
         // Get the name for the success message
         const allContestants = await getContestants();
@@ -59,6 +59,39 @@ app.get('/verify-vote', async (req, res) => {
     } else {
         res.send("Payment verification failed.");
     }
+});
+
+// API: Paystack Webhook
+app.post('/webhook', (req, res) => {
+    console.log("Webhook hit");
+    // Validate event using Paystack's signature
+    const hash = crypto.createHmac('sha512', process.env.PAYSTACK_SECRET_KEY)
+        .update(JSON.stringify(req.body))
+        .digest('hex');
+
+    if (hash === req.headers['x-paystack-signature']) {
+        const event = req.body;
+
+        if (event.event === 'charge.success') {
+            const reference = event.data.reference;
+            const amountPaid = event.data.amount / 100;
+
+            // Extract info from our custom reference "VOTE_ID_TIME"
+            const parts = reference.split('_');
+            if (parts[0] === 'VOTE' && parts.length >= 2) {
+                const contestantId = parts[1];
+                const votesToAdd = Math.floor(amountPaid / VOTE_COST);
+
+                // Process payment idempotently in the background
+                processPaymentAndAddVotes(reference, contestantId, votesToAdd).catch(err => {
+                    console.error('Webhook processing error:', err);
+                });
+            }
+        }
+    }
+
+    // Always return 200 OK to acknowledge receipt
+    res.sendStatus(200);
 });
 
 // Connect to Database immediately when server starts

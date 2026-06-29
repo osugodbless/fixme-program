@@ -18,6 +18,16 @@ const contestantSchema = new mongoose.Schema({
 
 const Contestant = mongoose.model('Contestant', contestantSchema);
 
+// Define Transaction Schema for Idempotency
+const transactionSchema = new mongoose.Schema({
+    reference: { type: String, required: true, unique: true },
+    contestantId: String,
+    votesAdded: Number,
+    date: { type: Date, default: Date.now }
+});
+
+const Transaction = mongoose.model('Transaction', transactionSchema);
+
 // Connect to MongoDB
 let isConnected = false;
 
@@ -65,4 +75,25 @@ const addVotes = async (id, numberOfVotes) => {
     }
 };
 
-module.exports = { getContestants, addVotes, Contestant, connectDB };
+// Idempotent Function to process payment and add votes exactly once
+const processPaymentAndAddVotes = async (reference, contestantId, votesToAdd) => {
+    try {
+        // Attempt to save the transaction. If reference already exists, it will throw a duplicate key error (11000)
+        const newTransaction = new Transaction({ reference, contestantId, votesAdded: votesToAdd });
+        await newTransaction.save();
+
+        // If we reach here, the transaction is new. Add the votes safely.
+        await addVotes(contestantId, votesToAdd);
+        return { success: true, status: 'processed' };
+    } catch (err) {
+        // 11000 is the MongoDB duplicate key error code
+        if (err.code === 11000) {
+            console.log(`Transaction ${reference} already processed. Skipping.`);
+            return { success: true, status: 'already_processed' };
+        }
+        console.error("Error processing payment transaction:", err);
+        return { success: false, status: 'error' };
+    }
+};
+
+module.exports = { getContestants, addVotes, processPaymentAndAddVotes, Contestant, Transaction, connectDB };
